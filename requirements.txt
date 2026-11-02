@@ -1,0 +1,18 @@
+# Install the CUDA PyTorch build first, as shown in README.md.
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.57.0
+tokenizers==0.22.0
+monai==1.5.0
+timm==1.0.19
+einops==0.6.1
+accelerate==1.10.0
+numpy==1.26.4
+scipy==1.14.0
+nibabel==5.2.1
+huggingface-hub==0.34.4
+safetensors==0.6.2
+pillow==10.4.0
+tqdm==4.67.1
+packaging==25.0
+Jinja2==3.1.6

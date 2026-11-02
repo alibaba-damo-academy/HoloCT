@@ -1,0 +1,8 @@
+# Single-sample mask and text metrics.
+surface-distance==0.1
+nltk==3.9.2
+rouge-score==0.1.2
+evaluate==0.4.6
+datasets==3.6.0
+pandas==2.3.2
+pyarrow==19.0.1
