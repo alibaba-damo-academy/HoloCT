@@ -4,8 +4,9 @@
 
 **A 3D foundation model unifying CT interpretation and segmentation**
 
-[![HoloCT-4B](https://img.shields.io/badge/Hugging_Face-HoloCT--4B-7562A5)](https://huggingface.co/yolo2025666/HoloCT-4B)
-[![HoloCT-8B](https://img.shields.io/badge/Hugging_Face-HoloCT--8B-7562A5)](https://huggingface.co/yolo2025666/HoloCT-8B)
+[![HoloCT-4B](https://img.shields.io/badge/Hugging_Face-HoloCT--4B-7562A5)](https://huggingface.co/Alibaba-DAMO-Academy/HoloCT-4B)
+[![HoloCT-8B](https://img.shields.io/badge/Hugging_Face-HoloCT--8B-7562A5)](https://huggingface.co/Alibaba-DAMO-Academy/HoloCT-8B)
+[![arXiv](https://img.shields.io/badge/arXiv-2611.06471-b31b1b.svg)](https://arxiv.org/abs/2611.06471)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![Transformers](https://img.shields.io/badge/Transformers-4.57.0-yellow.svg)](https://huggingface.co/docs/transformers)
@@ -15,6 +16,8 @@
 </div>
 
 ## Overview
+
+**Paper:** [A 3D foundation model unifying CT interpretation and segmentation](https://arxiv.org/abs/2611.06471) (arXiv:2611.06471).
 
 **HoloCT** brings CT interpretation and voxel-level segmentation into one model. Given a **3D CT volume and a text prompt**, it performs lesion screening, visual question answering, report generation and segmentation. Grounded responses connect textual findings to **3D masks**.
 
@@ -43,15 +46,15 @@ Radiologists interpret computed tomography (CT) scans by jointly determining wha
 
 | Model | Language backbone | Checkpoint |
 |---|---|---|
-| **HoloCT-4B** | Qwen3-VL-4B | [yolo2025666/HoloCT-4B](https://huggingface.co/yolo2025666/HoloCT-4B) |
-| **HoloCT-8B** | Qwen3-VL-8B | [yolo2025666/HoloCT-8B](https://huggingface.co/yolo2025666/HoloCT-8B) |
+| **HoloCT-4B** | Qwen3-VL-4B | [Alibaba-DAMO-Academy/HoloCT-4B](https://huggingface.co/Alibaba-DAMO-Academy/HoloCT-4B) |
+| **HoloCT-8B** | Qwen3-VL-8B | [Alibaba-DAMO-Academy/HoloCT-8B](https://huggingface.co/Alibaba-DAMO-Academy/HoloCT-8B) |
 
 After [installation](#installation), download either complete checkpoint, including its tokenizer and processor files:
 
 ```bash
-python -c "from huggingface_hub import snapshot_download; snapshot_download('yolo2025666/HoloCT-4B', local_dir='weights/HoloCT-4B')"
+python -c "from huggingface_hub import snapshot_download; snapshot_download('Alibaba-DAMO-Academy/HoloCT-4B', local_dir='weights/HoloCT-4B')"
 
-python -c "from huggingface_hub import snapshot_download; snapshot_download('yolo2025666/HoloCT-8B', local_dir='weights/HoloCT-8B')"
+python -c "from huggingface_hub import snapshot_download; snapshot_download('Alibaba-DAMO-Academy/HoloCT-8B', local_dir='weights/HoloCT-8B')"
 ```
 
 The demos use `weights/HoloCT-4B` by default. Select the 8B model with `--model weights/HoloCT-8B`.
@@ -61,7 +64,7 @@ The demos use `weights/HoloCT-4B` by default. Select the 8B model with `--model 
 Use **Ubuntu 22.04**, **Python 3.10.16** and an NVIDIA GPU supporting **bfloat16**. Each demo runs on one visible GPU with PyTorch SDPA. Run the commands from the repository root.
 
 ```bash
-git clone https://github.com/2021xyl/HoloCT.git
+git clone https://github.com/alibaba-damo-academy/HoloCT.git
 cd HoloCT
 
 conda env create -f environment.yml
@@ -176,12 +179,16 @@ demo_ct/                Task-named CT inputs
 
 ## Citation
 
+If you use HoloCT, please cite our [arXiv preprint](https://arxiv.org/abs/2611.06471):
+
 ```bibtex
 @misc{xie2026holoct,
   title={A 3D foundation model unifying CT interpretation and segmentation},
   author={Xie, Yulu and Li, Zilong and Xu, Shen and Bai, Yifan and Shi, Liuhong and Chen, Jiao and Kong, Xianglei and Zhu, Wenchao and Shen, Na and Ye, Xianghua and Yan, Yang and Zheng, Jiaju and Peng, Yunsong and Su, Yanzhou and Yu, Chaohui and Luo, Hao and Wang, Fan},
   year={2026},
-  url={https://github.com/2021xyl/HoloCT}
+  eprint={2611.06471},
+  archivePrefix={arXiv},
+  url={https://arxiv.org/abs/2611.06471}
 }
 ```
 
