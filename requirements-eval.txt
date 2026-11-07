@@ -1,8 +1,10 @@
-# Single-sample mask and text metrics.
+numpy==1.26.4
+scipy==1.14.0
+nibabel==5.2.1
 surface-distance==0.1
 nltk==3.9.2
 rouge-score==0.1.2
 evaluate==0.4.6
-datasets==3.6.0
+datasets==4.4.2
 pandas==2.3.2
-pyarrow==19.0.1
+pyarrow==22.0.0

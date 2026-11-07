@@ -1,0 +1,18 @@
+name: holoct-eval-ratescore
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.16
+  - pip
+  - pip:
+      - torch==2.6.0
+      - torchvision==0.21.0
+      - transformers==4.57.0
+      - tokenizers==0.22.0
+      - huggingface-hub==0.34.4
+      - numpy==1.26.4
+      - scipy==1.14.0
+      - pandas==2.3.2
+      - medspacy==1.3.1
+      - spacy==3.7.5
+      - RaTEScore==0.1.0

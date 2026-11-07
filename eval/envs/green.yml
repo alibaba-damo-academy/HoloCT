@@ -1,0 +1,14 @@
+name: holoct-eval-green
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.16
+  - pip
+  - pip:
+      - vllm==0.30.0
+      - torch==2.13.0
+      - torchvision==0.28.0
+      - transformers==5.17.0
+      - tokenizers==0.23.2
+      - huggingface-hub==1.33.0
+      - numpy==2.2.6

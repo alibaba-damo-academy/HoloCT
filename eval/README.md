@@ -2,14 +2,31 @@
 
 Run each example from the repository root. Supply a prediction and its reference from the same CT, question or finding. Results are printed as JSON; `--output metrics/example.json` also saves them.
 
-## Mask and text metrics
+## Environments
+
+Use Python 3.10.16 on Linux. Each model-based metric has its own Conda environment.
+
+| Metric | Environment file | PyTorch | vLLM | Transformers | NumPy |
+|---|---|---|---|---|---|
+| Llama clinical score and finding matching | [llama.yml](envs/llama.yml) | 2.9.1 | 0.15.1 | 4.57.0 | 2.2.6 |
+| GREEN | [green.yml](envs/green.yml) | 2.13.0 | 0.30.0 | 5.17.0 | 2.2.6 |
+| RaTEScore | [ratescore.yml](envs/ratescore.yml) | 2.6.0 | — | 4.57.0 | 1.26.4 |
+
+The corresponding PyTorch CUDA runtimes are 12.8, 13.0 and 12.4. Llama and GREEN require an NVIDIA GPU.
+
+### Mask and text overlap metrics
 
 ```bash
+conda create -n holoct-eval-basic python=3.10.16 pip -y
+conda activate holoct-eval-basic
 python -m pip install -r requirements-eval.txt
 python -m nltk.downloader punkt_tab wordnet omw-1.4
+python -m pip check
 ```
 
 Text metrics download their metric modules on first use through [Hugging Face Evaluate](https://github.com/huggingface/evaluate).
+
+## Mask and text metrics
 
 ### Segmentation and screening
 
@@ -39,17 +56,15 @@ Use `--prediction` for inline text or `--prediction-file` for a UTF-8 text file;
 
 ## Model-based text metrics
 
-Use a separate environment for each model-based metric and install its inference dependencies. Llama and GREEN entry points use [vLLM](https://docs.vllm.ai/en/latest/getting_started/installation/gpu/):
-
-```bash
-conda create -n holoct-judge python=3.10.16 -y
-conda activate holoct-judge
-python -m pip install vllm==0.7.3 transformers==4.48.2
-```
-
 ### Llama clinical score
 
-Download the Llama-3.1-70B-Instruct judge to `weights/Llama-3.1-70B-Instruct` and run:
+```bash
+conda env create -f eval/envs/llama.yml
+conda activate holoct-eval-llama
+python -m pip check
+```
+
+Download the [Llama-3.1-70B-Instruct](https://huggingface.co/meta-llama/Llama-3.1-70B-Instruct) judge to `weights/Llama-3.1-70B-Instruct` and run:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 python -m eval.llama --prediction-file outputs/vqa/grounded/response.txt --reference "There is a lesion in the liver." --question "Is there a liver lesion?" --question-type "Short answer"
@@ -59,7 +74,13 @@ Question types are `Report generation`, `Long answer`, `Short answer` and `Multi
 
 ### GREEN
 
-Obtain the [GREEN](https://github.com/Stanford-AIMI/GREEN) prompt utilities and provide its checkpoint at `weights/GREEN`:
+```bash
+conda env create -f eval/envs/green.yml
+conda activate holoct-eval-green
+python -m pip check
+```
+
+Obtain the [GREEN](https://github.com/Stanford-AIMI/GREEN) prompt utilities and provide its checkpoint at `weights/GREEN`. The script loads `make_prompt` and `clean_responses` from `green_score/utils.py`:
 
 ```bash
 git clone https://github.com/Stanford-AIMI/GREEN.git ../GREEN
@@ -70,12 +91,13 @@ GREEN returns the explanation, matched findings and error counts. Its score is `
 
 ### RaTEScore
 
-Install [RaTEScore](https://github.com/MAGIC-AI4Med/RaTEScore) and its model dependencies in its evaluation environment:
+Create the [RaTEScore](https://github.com/MAGIC-AI4Med/RaTEScore) environment and score a report pair:
 
 ```bash
-conda create -n holoct-rate python=3.10.16 -y
-conda activate holoct-rate
-python -m pip install RaTEScore==0.1.0 medspacy transformers torch pandas numpy
+conda env create -f eval/envs/ratescore.yml
+conda activate holoct-eval-ratescore
+python -m pip check
+python -c "from RaTEScore import RaTEScore; print('RaTEScore import OK')"
 python -m eval.ratescore --prediction-file outputs/rexgrounding_rg/grounded/response.txt --reference-file data/reference_report.txt --ner-model Angelakeke/RaTE-NER-Deberta --embedding-model FremyCompany/BioLORD-2023-C
 ```
 
@@ -96,6 +118,7 @@ Create a local `finding.json` containing one predicted finding and the reference
 ```
 
 ```bash
+conda activate holoct-eval-llama
 CUDA_VISIBLE_DEVICES=0,1 python -m eval.llama_rex --input finding.json --output metrics/finding_match.json
 ```
 
@@ -115,6 +138,7 @@ Create a local `report_case.json` for the findings in one CT. Enter the semantic
 ```
 
 ```bash
+conda activate holoct-eval-basic
 python -m eval.rex_report --input report_case.json
 ```
 

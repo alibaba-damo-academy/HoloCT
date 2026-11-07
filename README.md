@@ -11,7 +11,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![Transformers](https://img.shields.io/badge/Transformers-4.57.0-yellow.svg)](https://huggingface.co/docs/transformers)
 
-[Overview](#overview) · [Models](#models) · [Installation](#installation) · [Demos](#demos) · [Evaluation](#evaluation) · [Citation](#citation)
+[Overview](#overview) · [Models](#models) · [HoloDATA](#holodata) · [Installation](#installation) · [Demos](#demos) · [Evaluation](#evaluation) · [Citation](#citation)
 
 </div>
 
@@ -58,6 +58,14 @@ python -c "from huggingface_hub import snapshot_download; snapshot_download('Ali
 ```
 
 The demos use `weights/HoloCT-4B` by default. Select the 8B model with `--model weights/HoloCT-8B`.
+
+## HoloDATA
+
+HoloDATA is available with segmentation metadata, train/test splits, and full annotations for AMOS grounded, DeepTumorVQA grounded and BIMCV.
+
+Download [holodata.zip](https://github.com/alibaba-damo-academy/HoloCT/releases/download/holodata-v1/holodata.zip) and extract it in the repository root. See [holodata/README.md](holodata/README.md) for the datasets in each folder.
+
+To avoid redistributing source annotations, the remaining text and grounded datasets provide only `filename` and `ct_path` with their train/test splits.
 
 ## Installation
 
@@ -156,9 +164,19 @@ The [single-sample evaluation examples](eval/README.md) compute metrics from one
 | VQA and reports | BLEU-4, ROUGE-L, METEOR, Llama clinical score, GREEN and RaTEScore |
 | Grounded reports | Finding matching, finding F1, conditional Dice and FL-GRQ |
 
-For example, compute mask metrics for one target:
+Install the [basic metrics](eval/README.md#environments) and configure each model-based metric in its own environment:
+
+| Metric | Configuration |
+|---|---|
+| Llama clinical score and finding matching | [eval/envs/llama.yml](eval/envs/llama.yml) |
+| GREEN | [eval/envs/green.yml](eval/envs/green.yml) |
+| RaTEScore | [eval/envs/ratescore.yml](eval/envs/ratescore.yml) |
+
+For example, compute mask metrics for one target in the basic evaluation environment:
 
 ```bash
+conda create -n holoct-eval-basic python=3.10.16 pip -y
+conda activate holoct-eval-basic
 python -m pip install -r requirements-eval.txt
 python -m eval.seg_and_screening \
   --prediction outputs/my_seg/grounded/mask_000.nii.gz \
@@ -174,6 +192,7 @@ inference/dataset/      CT dataset and collator
 inference/scripts/      Six inference demos
 inference/demo_utils.py Model loading, generation and mask export
 eval/                   Single-sample metric examples
+holodata/               Dataset metadata, annotations and train/test splits
 demo_ct/                Task-named CT inputs
 ```
 
